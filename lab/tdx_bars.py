@@ -39,7 +39,7 @@ def _get_datetime(category, buf, pos):
         day = (zipday % 2048) % 100
         hour, minute = tminutes // 60, tminutes % 60
         pos += 4
-        if category in (7, 8):
+        if category < 4 or category in (7, 8):
             return '%04d%02d%02d%02d%02d' % (year, month, day, hour, minute), pos
         return '%04d%02d%02d' % (year, month, day), pos
     else:
@@ -117,7 +117,8 @@ def parse_052d(body, category):
         l = (p_open + d_low) / 1000.0
         pre_diff_base = p_open + d_close
         bars.append((time_key, round(o, 3), round(h, 3), round(l, 3),
-                     round(c, 3), _get_volume(dbvol_raw), int(_get_volume(vol_raw)) * 100))
+                     round(c, 3), _get_volume(dbvol_raw),
+                     int(_get_volume(vol_raw)) * (100 if category >= 4 else 1)))
     return bars
 
 
