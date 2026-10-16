@@ -11,6 +11,11 @@ import argparse, csv, secrets, socket, struct, sys, threading, time, zlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+try:
+    from tdx_bars import CATEGORY_CODES, MAX_PER_CALL, make_052d, parse_052d
+except ImportError:  # allow importing from the repository root
+    from lab.tdx_bars import CATEGORY_CODES, MAX_PER_CALL, make_052d, parse_052d
+
 # ---------------------------------------------------------------------------
 # Server pool (48 hosts from stock connect.cfg)
 # ---------------------------------------------------------------------------
@@ -80,15 +85,19 @@ def _make_4045(seq, market, code, cursor_start, cursor_end, period):
 
 
 def _parse_minute_bars(body):
-    """Parse 1m/5m bars: u16 day, u16 minute, 5×f32, 2×u32."""
+    """Legacy op4045 parser; decode packed TDX date to YYYYMMDDHHMM."""
     if len(body) < 6 or (len(body) - 6) % 32:
         return []
     bars = []
     for off in range(6, len(body), 32):
         day, minute = struct.unpack_from('<HH', body, off)
+        year = (day >> 11) + 2004
+        month = (day % 2048) // 100
+        dom = (day % 2048) % 100
+        time_key = '%04d%02d%02d%02d%02d' % (year, month, dom, minute // 60, minute % 60)
         o, h, l, c, amt = struct.unpack_from('<5f', body, off + 4)
         vol, _ = struct.unpack_from('<II', body, off + 24)
-        bars.append((day * 100000 + minute, o, h, l, c, amt, vol))
+        bars.append((time_key, o, h, l, c, amt, vol))
     return bars
 
 
@@ -192,40 +201,47 @@ class DataSession:
                 time.sleep(0.3 * (retry + 1))
                 self._connect()
 
-    def fetch_full(self, code, period, max_bars=10000):
-        """Fetch data; daily paginates from present backwards. Returns most recent bars."""
-        if period != 'daily':
-            return self.fetch(code, period)
+    def fetch_052d(self, code, period, start=0, count=800):
+        """Count-based bars: start=0 is newest, then page backward."""
+        self._ensure()
+        category = CATEGORY_CODES[period]
+        for retry in range(3):
+            try:
+                self.seq = (self.seq + 1) & 0xff or 1
+                self.sock.sendall(make_052d(self.seq, market_of(code), code,
+                                             category, start, count))
+                hdr, body = _recv_response(self.sock)
+                return parse_052d(body, category)
+            except (OSError, ConnectionError, RuntimeError):
+                if retry == 2:
+                    raise
+                try: self.sock.close()
+                except OSError: pass
+                self.sock = None
+                time.sleep(0.3 * (retry + 1))
+                self._connect()
 
-        # Daily: fetch latest batch first, then paginate backwards
+    def fetch_full(self, code, period, max_bars=10000):
+        """Fetch newest-to-oldest with the proven 0x052d count cursor."""
         all_bars = []
         seen = set()
-
-        # Step 1: get latest data using narrow recent cursor
-        batch = self.fetch(code, 'daily')
-        for b in batch:
-            if b[0] not in seen:
-                seen.add(b[0])
-                all_bars.append(b)
-
-        # Step 2: if need more, widen cursor window progressively
-        # Each step goes back further in history
-        cursor_end = 0x01352700  # ~June 2026
+        start = 0
         while len(all_bars) < max_bars:
-            batch = self.fetch(code, 'daily', cursor=(0x00000000, cursor_end))
+            batch = self.fetch_052d(code, period, start=start,
+                                     count=min(MAX_PER_CALL, max_bars - len(all_bars)))
+            if not batch:
+                break
             new = [b for b in batch if b[0] not in seen]
             if not new:
                 break
             for b in new:
                 seen.add(b[0])
                 all_bars.append(b)
-            if len(batch) < MAX_BARS_PER_QUERY:
+            if len(batch) < MAX_PER_CALL:
                 break
-            # Step back ~3 years per page
-            cursor_end = max(0x01000000, cursor_end - 0x00140000)
-
+            start += len(batch)
         all_bars.sort(key=lambda b: b[0])
-        return all_bars[-max_bars:] if max_bars < len(all_bars) else all_bars
+        return all_bars[-max_bars:] if len(all_bars) > max_bars else all_bars
 
     def close(self):
         if self.sock:

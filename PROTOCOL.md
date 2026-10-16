@@ -81,6 +81,20 @@
 - op1721 分块文件传输已复现（30000B 分块）；验证的 zd.zip 是导引图片，bi/bigdata_1.zip 是 cloud_cfg 配置包，均非分钟线数据。
 - c9 1m样本逐条验证脚本：`lab/validate_1m_pairs.py`；请求/响应顺序核验：`lab/analyze_session_pairing.py`；c2/c9前置差异：`lab/compare_preambles.py`。CLI原型`lab/tdx_min_cli.py`尚不能live拉取1m；完整旧c9前置帧重放仍返回6B状态，保留作失败基线。
 
+## 3.3 生产分页改用 op052d（2026-10-16 实测）
+
+`op4045` 的绝对游标在云主站上出现静默旧窗口/伪响应风险：固定抓包游标会一直返回 2026-06-08 起的分钟窗口；日线用 `(近期窗口 + (0,旧端点))` 拼接时会产生 1995-04-13→2026-06-08 的大洞。
+
+因此生产 CLI 改用 pytdx 已长期验证的 `op 0x052d`：
+
+```text
+struct.pack('<HIHHHH6sHHHHIIH',
+  0x10c, 0x01016408, 0x1c, 0x1c, 0x052d,
+  market, code6s, category, 1, start, count, 0, 0, 0)
+```
+
+`start=0` 表示最新偏移，`count≤800`；按 `start += count` 翻页即可得到连续历史。category：8=1分钟、0=5分钟、9=日线。价格是变长差分编码，成交量/成交额是 pytdx 兼容的浮点编码。该报文与 pytdx 注释中的发送 hex 逐字节一致，已在 Ubuntu 实测：000001 日线 8471 根（1991-04-03→2026-10-16）、1m/5m 均能到 2026-10-16 15:00。
+
 ## 4. 与 pytdx 的关系
 
 - pytdx = 可用的老协议实现；与本次桌面端 0C op4045 外层封装不同。
