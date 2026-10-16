@@ -78,4 +78,4 @@ python3 lab/tdx_cli.py 000001 --period daily --out my_data.csv
 - 北交所（market=2）在此协议下不可用
 - 并发过多可能触发服务器限流（4 worker 实测稳定）
 - op11 模板来自抓包，协议升级后可能需重新提取
-- 052d 的第二个成交量字段按 pytdx 兼容语义输出为 `amount`，需与本地 `.day/.lc1` 做一次业务口径复核
+- 052d 的两个成交字段必须按 IEEE-754 float32 解码（不是 pytdx 旧版 `get_volume`）；日线 volume 原始单位为手，CLI 统一输出为股，分钟 volume 原始即为股，amount 均为元。84 股实测 1m/5m 汇总与日线严格闭合

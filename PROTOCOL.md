@@ -93,7 +93,7 @@ struct.pack('<HIHHHH6sHHHHIIH',
   market, code6s, category, 1, start, count, 0, 0, 0)
 ```
 
-`start=0` 表示最新偏移，`count≤800`；按 `start += count` 翻页即可得到连续历史。category：8=1分钟、0=5分钟、9=日线。价格是变长差分编码，成交量/成交额是 pytdx 兼容的浮点编码。该报文与 pytdx 注释中的发送 hex 逐字节一致，已在 Ubuntu 实测：000001 日线 8471 根（1991-04-03→2026-10-16）、1m/5m 均能到 2026-10-16 15:00。
+`start=0` 表示最新偏移，`count≤800`；按 `start += count` 翻页即可得到连续历史。category：8=1分钟、0=5分钟、9=日线。价格是变长差分编码；成交量/成交额的两个 u32 槽必须按 IEEE-754 float32 解码，不能套用 pytdx 旧版 `get_volume()`（该函数对部分 bit pattern 偶然相同、对另一些会静默错解）。日线 volume 原始单位为手，分钟 volume 原始单位为股，amount 均为元。修正后 84 股实测 1m/5m 的全天 volume/amount 与日线闭合。该报文与 pytdx 注释中的发送 hex 逐字节一致，已在 Ubuntu 实测：000001 日线 8471 根（1991-04-03→2026-10-16）、1m/5m 均能到 2026-10-16 15:00。
 
 ## 4. 与 pytdx 的关系
 

@@ -13,7 +13,7 @@ tdx_bars.py — TDX op 0x052d (get_security_bars) 纯 stdlib 实现。
         0x10c, 0x01016408, 0x1c, 0x1c, 0x052d,
         market, code6s, category, 1, start, count, 0, 0, 0)
   recv: 16B 头(zlib帧) + u16 count + N×记录
-  记录: 4B datetime | varint×4 价格差分 | u32 vol | u32 dbvol(amount)
+  记录: 4B datetime | varint×4 价格差分 | f32 volume | f32 amount
 
 category: 8=1分钟, 0=5分钟, 9=日K线（15/30/60分钟请从5m聚合，服务器不直接给）
 """
@@ -116,9 +116,15 @@ def parse_052d(body, category):
         h = (p_open + d_high) / 1000.0
         l = (p_open + d_low) / 1000.0
         pre_diff_base = p_open + d_close
+        # Current 7709 servers encode these two u32 slots as IEEE-754 float32.
+        # pytdx's legacy get_volume decoder happens to agree for many bit patterns,
+        # but silently corrupts others. Daily volume is in lots; minute volume is
+        # already in shares. Amount is yuan for both.
+        volume = struct.unpack('<f', struct.pack('<I', vol_raw))[0]
+        amount = struct.unpack('<f', struct.pack('<I', dbvol_raw))[0]
         bars.append((time_key, round(o, 3), round(h, 3), round(l, 3),
-                     round(c, 3), _get_volume(dbvol_raw),
-                     int(_get_volume(vol_raw)) * (100 if category >= 4 else 1)))
+                     round(c, 3), float(amount),
+                     int(round(volume)) * (100 if category == 9 else 1)))
     return bars
 
 
