@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Large capture data (51+ MB) — not for git
+lab/out/
+
+# External clones / reference code
+pytdx/
+pytdx_pypi/
+rea/
+
+# Config backups (may contain server IPs, not credentials but keep lean)
+lab/connect.cfg.bak_orig
+lab/connect.cfg.pre_login_capture
+
+# J-space workspace (internal)
+.jspace/
+
+# OS
+Thumbs.db
+Desktop.ini
