@@ -1,0 +1,42 @@
+{
+  "file_sha256": "0171097deed614bc1e37d8220ec50b940f9a26fa40746b7d3644a0838f09a9a3",
+  "records": 193848,
+  "stocks": [
+    {
+      "code": "301093",
+      "file_events": 5,
+      "network_events": 5,
+      "field_mismatches": [],
+      "completed_close_bars": 399,
+      "bad_over_001": 0,
+      "max_abs": 0.005029585798816072
+    },
+    {
+      "code": "600125",
+      "file_events": 29,
+      "network_events": 29,
+      "field_mismatches": [],
+      "completed_close_bars": 399,
+      "bad_over_001": 0,
+      "max_abs": 0.0009999978542332144
+    },
+    {
+      "code": "688215",
+      "file_events": 6,
+      "network_events": 6,
+      "field_mismatches": [],
+      "completed_close_bars": 399,
+      "bad_over_001": 0,
+      "max_abs": 0.00496753647042425
+    },
+    {
+      "code": "920002",
+      "file_events": 4,
+      "network_events": 4,
+      "field_mismatches": [],
+      "completed_close_bars": 399,
+      "bad_over_001": 0,
+      "max_abs": 0.004897965995638742
+    }
+  ]
+}

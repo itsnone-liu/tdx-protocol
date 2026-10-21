@@ -1,5 +1,26 @@
 # TDX (通达信) 行情数据纯 CLI 逆向
 
+## 2026-10-21 真实客户端增量验证
+
+新增 `realclient/cli.py`：真实 op11 握手、沪深北实时快照、op15 批量除权、仿射前复权计算。使用 Python3 + tdxpy==0.2.7（仅编解码）；不访问腾讯或新浪。
+
+```bash
+python3 -m pip install -r realclient/requirements.txt
+python3 realclient/cli.py quotes sh600125 sz000001 bj920002 --bootstrap lab/op11_template.bin
+python3 realclient/cli.py xdxr-batch sh600125 bj920002 --bootstrap lab/op11_template.bin
+python3 realclient/test_cli.py
+```
+
+本轮证据：
+- **客户端正常退出、17709关闭后**，独立新连接quotes3/3与除权46/15条通过，随后恢复客户端。
+- 同主站同80只：旧库握手0条；真实op11握手80条，沪30深30北20身份集合匹配（异常000004单列，CLI拒收意外代码）。
+- 定向16只共25,536个已收盘OHLC价格点，与实际客户端front输出误差均≤0.01。
+- 冻结种子随机50只近一年事件票：49只有效基准46,880个OHLC价格点零超差；601198.SH客户端缺Date基准，**不是50/50通过**。
+- 本地gbbq与网络4股44条cat1字段完全相等；实际客户端批量op15已在独立连接复现。
+- **ForwardFactor不等于front价格乘数**。前复权使用cat1仿射链；不能以股本前后比替代送转率。
+
+详见 [本轮报告](docs/REALCLIENT_20261021.md) 与 `realclient/evidence/` 精简结果。Ubuntu运行尚未实测；模板仍来自真实抓包，尚不是完整初始化字段生成器。以下旧文中的“北交所不可用”只描述旧K线探针，**不适用于本轮实时与除权**；旧模板长度说明亦有笔误：当前前缀284B（含12B头），加8B尾共292B。
+
 逆向通达信桌面版 V7.73 的行情数据下载协议，实现纯 Python stdlib CLI，
 无需登录、无需运行桌面客户端、可直接在 Ubuntu 上使用。
 
