@@ -1,0 +1,50 @@
+[
+  {
+    "market": 2,
+    "advertised_total": 389,
+    "received_total": 389,
+    "samples": [
+      {
+        "market": 2,
+        "code": "920002",
+        "volunit": 100,
+        "name": "万达轴承"
+      }
+    ],
+    "unique_codes": 389
+  },
+  {
+    "market": 1,
+    "advertised_total": 27677,
+    "received_total": 27677,
+    "samples": [
+      {
+        "market": 1,
+        "code": "000001",
+        "volunit": 100,
+        "name": "上证指数"
+      },
+      {
+        "market": 1,
+        "code": "600125",
+        "volunit": 100,
+        "name": "铁龙物流"
+      }
+    ],
+    "unique_codes": 27677
+  },
+  {
+    "market": 0,
+    "advertised_total": 24454,
+    "received_total": 24454,
+    "samples": [
+      {
+        "market": 0,
+        "code": "000001",
+        "volunit": 100,
+        "name": "平安银行"
+      }
+    ],
+    "unique_codes": 24454
+  }
+]

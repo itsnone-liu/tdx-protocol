@@ -1,0 +1,39 @@
+{
+  "rows": [
+    {
+      "market": 1,
+      "code": "600125",
+      "data_date": 20260825,
+      "ipo_date": 19980511,
+      "float_shares": 1305521875.0,
+      "total_shares": 1305521875.0,
+      "finance_float_shares": 1305521875.0,
+      "finance_updated_date": 20260825,
+      "relative_float_difference": 0.0
+    },
+    {
+      "market": 0,
+      "code": "000001",
+      "data_date": 20260815,
+      "ipo_date": 19910403,
+      "float_shares": 19405685000.0,
+      "total_shares": 19405918750.0,
+      "finance_float_shares": 19405685000.0,
+      "finance_updated_date": 20260815,
+      "relative_float_difference": 0.0
+    },
+    {
+      "market": 2,
+      "code": "920002",
+      "data_date": 20260804,
+      "ipo_date": 20240530,
+      "float_shares": 44597202.1484375,
+      "total_shares": 63704199.21875,
+      "finance_float_shares": 44597202.1484375,
+      "finance_updated_date": 20260804,
+      "relative_float_difference": 0.0
+    }
+  ],
+  "bytes": 431,
+  "row_bytes": 143
+}

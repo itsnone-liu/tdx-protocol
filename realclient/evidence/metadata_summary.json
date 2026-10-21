@@ -1,0 +1,68 @@
+{
+  "capital_checks": [
+    {
+      "sym": "600125.SH",
+      "client_float_shares": 1305521800.0,
+      "protocol_float_shares": 1305521875.0,
+      "relative_difference": 5.744829385461047e-08,
+      "volume_hand": 33415,
+      "protocol_turnover_pct": 0.25595128384960997,
+      "client_capital_turnover_pct": 0.2559512985535745,
+      "finance_updated_date": 20260825
+    },
+    {
+      "sym": "000001.SZ",
+      "client_float_shares": 19405685000.0,
+      "protocol_float_shares": 19405685000.0,
+      "relative_difference": 0.0,
+      "volume_hand": 503858,
+      "protocol_turnover_pct": 0.2596445320018335,
+      "client_capital_turnover_pct": 0.2596445320018335,
+      "finance_updated_date": 20260815
+    },
+    {
+      "sym": "920002.BJ",
+      "client_float_shares": 44597200.0,
+      "protocol_float_shares": 44597202.1484375,
+      "relative_difference": 4.817426878817504e-08,
+      "volume_hand": 11660,
+      "protocol_turnover_pct": 2.614513789719546,
+      "client_capital_turnover_pct": 2.6145139156718358,
+      "finance_updated_date": 20260804
+    }
+  ],
+  "directory_rows_by_market": {
+    "0": 3000,
+    "1": 3000,
+    "2": 0
+  },
+  "directory_errors": {
+    "2_error": "TimeoutError('timed out')"
+  },
+  "snapshot_complete": true,
+  "snapshot": [
+    {
+      "market": 1,
+      "code": "600125",
+      "float_shares": 1305521875.0,
+      "turnover_pct": 0.25595128384960997,
+      "finance_updated_date": 20260825
+    },
+    {
+      "market": 0,
+      "code": "000001",
+      "float_shares": 19405685000.0,
+      "turnover_pct": 0.25964453200183346,
+      "finance_updated_date": 20260815
+    },
+    {
+      "market": 2,
+      "code": "920002",
+      "float_shares": 44597202.1484375,
+      "turnover_pct": 2.614513789719546,
+      "finance_updated_date": 20260804
+    }
+  ],
+  "missing_601198": "client daily/info/snapshot empty; no replacement; random acceptance remains49/50",
+  "names_status": "NOT ACCEPTED: BJ list timed out, no complete market pagination verification"
+}

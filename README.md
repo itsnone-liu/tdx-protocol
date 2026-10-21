@@ -1,5 +1,21 @@
 # TDX (通达信) 行情数据纯 CLI 逆向
 
+## 后续更新：批量股本、名称、前复权与故障保护
+
+`realclient/cli.py` 当前还支持 `capital-batch`、`snapshot-batch`、`names`、`daily`、`qfq-daily`、`finance`。真实名称协议044E/044D已在沪深北在线复现；80只quotes+op16股本约594ms（单次午间样本）。独立网络daily+xdxr自算qfq的四只6384个OHLC点全≤0.01。回归 **27/27通过**。
+
+全市场按本机文件清单5597只，op15累计187646事件、373秒、零请求失败；该清单含旧码，不是官方在市普查。R1原始字节证明601198当前日线响应为空、quote返回600839，排除本项目JSON解析丢Date；证券生命周期原因未知。线上/本地表未发现重复cat1，不能据此宣称同日归一化已验。
+
+```bash
+python3 realclient/cli.py snapshot-batch sh600125 sz000001 bj920002 --bootstrap lab/op11_template.bin --out snapshot.json
+python3 realclient/cli.py names bj920002 --bootstrap lab/op11_template.bin --out bj_names.json
+python3 realclient/cli.py qfq-daily sh600125 --count 400 --bootstrap lab/op11_template.bin --out qfq.json
+# 仅传输故障切站；语义错误不静默重试。结果原子替换，失败保留旧文件。
+python3 realclient/cli.py quotes sh600125 --host 123.60.164.122 --fallback-host 175.178.112.197:7709 --bootstrap lab/op11_template.bin --out quotes.json --attempt-log attempts.json
+```
+
+[R1–R6待验清单](docs/R1_R6_ACCEPTANCE_PLAN.md)、[Ubuntu交接说明（未实跑）](docs/UBUNTU_HANDOFF.md)、[工程与证据摘要](docs/REALCLIENT_UPDATE_20261021.md)。特殊类别/未知类别在复权窗口内失败即拒绝；不宣称全史复权、竞价或停牌状态已验收。
+
 ## 2026-10-21 真实客户端增量验证
 
 新增 `realclient/cli.py`：真实 op11 握手、沪深北实时快照、op15 批量除权、仿射前复权计算。使用 Python3 + tdxpy==0.2.7（仅编解码）；不访问腾讯或新浪。

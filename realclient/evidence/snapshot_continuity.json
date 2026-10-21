@@ -1,0 +1,295 @@
+{
+  "connections": 3,
+  "requests": 9,
+  "complete_requests": 9,
+  "samples": [
+    {
+      "connection": 0,
+      "sample": 0,
+      "elapsed_ms": 329,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 0,
+      "sample": 1,
+      "elapsed_ms": 328,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 0,
+      "sample": 2,
+      "elapsed_ms": 312,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 1,
+      "sample": 0,
+      "elapsed_ms": 297,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 1,
+      "sample": 1,
+      "elapsed_ms": 281,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 1,
+      "sample": 2,
+      "elapsed_ms": 297,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 2,
+      "sample": 0,
+      "elapsed_ms": 296,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 2,
+      "sample": 1,
+      "elapsed_ms": 282,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    },
+    {
+      "connection": 2,
+      "sample": 2,
+      "elapsed_ms": 297,
+      "complete": true,
+      "rows": [
+        {
+          "market": 1,
+          "code": "600125",
+          "price": 5.26,
+          "last_close": 5.2700000000000005,
+          "vol": 33415,
+          "servertime": "11:29:31.650"
+        },
+        {
+          "market": 0,
+          "code": "000001",
+          "price": 11.42,
+          "last_close": 11.44,
+          "vol": 503858,
+          "servertime": "11:31:53.754"
+        },
+        {
+          "market": 2,
+          "code": "920002",
+          "price": 48.76,
+          "last_close": 50.6,
+          "vol": 11660,
+          "servertime": "11:29:31.350"
+        }
+      ]
+    }
+  ]
+}

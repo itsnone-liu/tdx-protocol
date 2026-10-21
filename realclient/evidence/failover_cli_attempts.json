@@ -1,0 +1,13 @@
+[
+  {
+    "host": "127.0.0.1",
+    "port": 59999,
+    "status": "transport_failed",
+    "error": "ConnectionRefusedError(10061, '由于目标计算机积极拒绝，无法连接。', None, 10061, None)"
+  },
+  {
+    "host": "123.60.164.122",
+    "port": 7709,
+    "status": "success"
+  }
+]

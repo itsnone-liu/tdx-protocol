@@ -1,0 +1,57 @@
+{
+  "template_bytes": 284,
+  "sha256": "d8b33ff083caa96a2fd507a0035405e76295f28d1d2ffec2c8e7d0ae1d1bf4d8",
+  "request_declared_lengths": [
+    282,
+    282
+  ],
+  "opcode": 11,
+  "opaque_payload_bytes": 272,
+  "matches": [
+    {
+      "capture": "rec_20261015T235945Z",
+      "connection": "c12_c2s",
+      "offset": 0,
+      "frame_bytes": 292,
+      "exact_template_prefix": true,
+      "payload_prefix_same_ignoring_header": true,
+      "tail_bytes": 8
+    },
+    {
+      "capture": "rec_20261015T235945Z",
+      "connection": "c2_c2s",
+      "offset": 0,
+      "frame_bytes": 292,
+      "exact_template_prefix": true,
+      "payload_prefix_same_ignoring_header": true,
+      "tail_bytes": 8
+    },
+    {
+      "capture": "rec_20261015T235945Z",
+      "connection": "c6_c2s",
+      "offset": 0,
+      "frame_bytes": 292,
+      "exact_template_prefix": true,
+      "payload_prefix_same_ignoring_header": true,
+      "tail_bytes": 8
+    },
+    {
+      "capture": "rec_20261015T235945Z",
+      "connection": "c9_c2s",
+      "offset": 0,
+      "frame_bytes": 292,
+      "exact_template_prefix": true,
+      "payload_prefix_same_ignoring_header": true,
+      "tail_bytes": 8
+    },
+    {
+      "capture": "rec_20261016T072253Z",
+      "connection": "c1_c2s",
+      "offset": 0,
+      "frame_bytes": 292,
+      "exact_template_prefix": true,
+      "payload_prefix_same_ignoring_header": true,
+      "tail_bytes": 8
+    }
+  ]
+}
