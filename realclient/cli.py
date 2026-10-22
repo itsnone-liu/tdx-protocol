@@ -14,24 +14,50 @@ def exact(s,n):
  b=bytearray()
  while len(b)<n:
   chunk=s.recv(n-len(b))
-  if not chunk:raise ConnectionError('truncated response')
+  if not chunk:raise ConnectionError('truncated response: got %d of %d bytes'%(len(b),n))
   b.extend(chunk)
  return bytes(b)
+
+def unwrap(body,packed,raw):
+ """Frame payload length gate (A-2): comp_len==len(response)-16 and raw_len==len(clear).
+ R4/R5 byte-level comparison 2026-10-22: identity held at all five successful capture
+ points; the 09:27:55 client-side 'truncated response' is exactly what the missing gate
+ looks like, so both halves of the gate are enforced here instead of inferred."""
+ if packed==raw:
+  clear=body
+ else:
+  d=zlib.decompressobj()
+  try:clear=d.decompress(body)+d.flush()
+  except zlib.error as exc:raise ValueError('zlib decode failed: %s'%exc)
+  if d.unconsumed_tail:raise ValueError('compressed stream unconsumed tail: %d bytes'%len(d.unconsumed_tail))
+  if d.unused_data:raise ValueError('compressed stream trailing bytes: %d'%len(d.unused_data))
+ if len(clear)!=raw:raise ValueError('response size mismatch: header raw_len=%d clear=%d'%(raw,len(clear)))
+ return clear
 
 def recv(s):
  h=exact(s,16)
  if h[:4]!=bytes.fromhex('b1 cb 74 00'):raise ValueError('unexpected header')
  packed,raw=struct.unpack_from('<HH',h,12)
  body=exact(s,packed)
- if packed!=raw:body=zlib.decompress(body)
- if len(body)!=raw:raise ValueError('response size mismatch')
- return h,body
+ if len(body)!=packed:raise ValueError('compressed length mismatch: header packed=%d body=%d'%(packed,len(body)))
+ return h,unwrap(body,packed,raw)
 
 def symbol(value):
  market={'sz':0,'sh':1,'bj':2}.get(value[:2].lower())
  code=value[2:]
  if market is None or len(code)!=6 or not code.isdigit():raise ValueError('expected sh600125 / sz000001 / bj920002')
  return market,code
+
+def check_quote_count(body,rows):
+ """Integrity gate (D8/C-3): quote records are NOT fixed stride (observed 64-79 bytes,
+ because price fields use variable-width encoding). The record count declared in the
+ response header (body[2:4]) is therefore the reference. Fewer parsed records than
+ declared == parser/transport corruption -> fail closed. More than declared is recorded
+ as redundant by the caller; unknown keys already land in `unexpected` via whitelist."""
+ if not isinstance(body,(bytes,bytearray)) or len(body)<4:return None
+ declared=struct.unpack_from('<H',body,2)[0]
+ if len(rows)<declared:raise ValueError('quote record count shortfall: declared %d parsed %d'%(declared,len(rows)))
+ return declared
 
 def parse_capital_batch(body,stocks):
  """Decode only verified op16 offsets; reject identity/length corruption."""
@@ -60,14 +86,20 @@ class Session:
   self.sock.sendall(cmd.send_pkg);h,b=recv(self.sock)
   if struct.unpack_from('<H',h,10)[0]!=struct.unpack_from('<H',cmd.send_pkg,10)[0]:raise ValueError('response opcode mismatch')
   if h[5]!=cmd.send_pkg[1]:raise ValueError('response sequence mismatch')
+  self.last_body=b
   return cmd.parseResponse(b)
  def quotes(self,stocks):
   result=[];missing=[];unexpected=[]
   for start in range(0,len(stocks),80):
    chunk=stocks[start:start+80];cmd=GetSecurityQuotesCmd(self.sock);cmd.setParams(chunk)
    rows=self.call(cmd) or [];expected=set(chunk);seen=set()
+   body=getattr(self,'last_body',None)
+   if isinstance(body,bytes):check_quote_count(body,rows)
    for r in rows:
     key=(r['market'],r['code'])
+    # Whitelist口径 (D8): the server balances 条数 by returning a placeholder row such as
+    # 600839 for every record it withholds; anything outside the requested set is
+    # therefore noise, never data.
     if key not in expected:unexpected.append(key);continue
     if key in seen:raise ValueError('duplicate returned quote')
     seen.add(key);result.append(r)
